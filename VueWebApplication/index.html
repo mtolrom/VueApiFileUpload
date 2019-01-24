@@ -22,86 +22,93 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 
     <div id="app">
-        <p>{{ info }}</p>
-    </div>
+        <h2 class="paris">Upload a File - Vuejs API Call</h2>
 
+        <form enctype="multipart/form-data">
+
+            <div class="form-horizontal">
+                <hr />
+
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Language</p>
+                    <div class="col-md-10">
+                        <select name="partitionkey">
+                            <option value="English">English</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="Chineese">Chineese</option>
+                            <option value="Ngambaye">Ngambaye</option>
+                        </select><br />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Title</p>
+                    <div class="col-md-10">
+                        <input type="text" name="title" style="width:80%;" maxlength="200" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Text</p>
+                    <div class="col-md-10">
+                        <textarea rows="5" style="width:80%;" name="body" maxlength="2000" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Images</p>
+                    <div class="col-md-10">
+                        <input type="file" multiple="multiple" id="photoUrl" name="file" v-on:change="fileChange($event.target.files)" accept="application/vnd.msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                text/plain, application/pdf, image/*">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Sounds</p>
+                    <div class="col-md-10">
+                        <input type="file" multiple="multiple" id="photoUrl" name="file" v-on:change="fileChange($event.target.files)" accept="application/vnd.msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                text/plain, application/pdf, image/*">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Author</p>
+                    <div class="col-md-10">
+                        <input type="text" name="custom5" style="width:80%;" maxlength="100" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Tags</p>
+                    <div class="col-md-10">
+                        <input type="text" name="custom3" style="width:80%;" maxlength="500">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" v-on:click="upload()" class="btn btn-primary btn-lg" style="font-family:Poiret One;width:25%;">Submit</button>
+            </div>
+        </form>
+        <!--<p>{{ info }}</p>-->
+    </div>
     <script>
-        new Vue({
-            el: '#app',
+        import axios from "https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js";
+
+        export default {
+            name: 'app',
             data() {
                 return {
-                    info: null
+                    files: new FormData()
                 }
             },
-            mounted() {
-                axios
-                    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-                    .then(response => (this.info = response))
+            methods: {
+                fileChange(fileList) {
+                    this.files.append("file", fileList[0], fileList[0].name);
+                },
+                upload() {
+                    axios({ method: "POST", "url": "http://mekonecampusapi.azurewebsites.net/api/pictures", "data": this.files }).then(result => {
+                        console.dir(result.data);
+                    }, error => {
+                        console.error(error);
+                    });
+                }
             }
-        })
+        }
     </script>
-
-    <h2 class="paris">Upload a File - Vuejs API Call</h2>
-
-    <form action="/Home/CreateArticle" enctype="multipart/form-data" method="post">
-
-        <div class="form-horizontal">
-            <hr />
-
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Language</p>
-                <div class="col-md-10">
-                    <select name="partitionkey">
-                        <option value="English">English</option>
-                        <option value="Spanish">Spanish</option>
-                        <option value="French">French</option>
-                        <option value="Chineese">Chineese</option>
-                        <option value="Ngambaye">Ngambaye</option>
-                    </select><br />
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Title</p>
-                <div class="col-md-10">
-                    <input type="text" name="title" style="width:80%;" maxlength="200" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Text</p>
-                <div class="col-md-10">
-                    <textarea rows="5" style="width:80%;" name="body" maxlength="2000" required></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Images</p>
-                <div class="col-md-10">
-                    <input type="file" multiple="multiple" id="photoUrl" name="photoUrl" accept="application/vnd.msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
-                text/plain, application/pdf, image/*">
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Sounds</p>
-                <div class="col-md-10">
-                    <input type="file" multiple="multiple" id="photoUrl" name="photoUrl" accept="application/vnd.msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
-                text/plain, application/pdf, image/*">
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Book Author</p>
-                <div class="col-md-10">
-                    <input type="text" name="custom5" style="width:80%;" maxlength="100" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <p class="control-label col-md-2" style="font-family:Poiret One;font-weight:bolder;">Tags</p>
-                <div class="col-md-10">
-                    <input type="text" name="custom3" style="width:80%;" maxlength="500">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary btn-lg" style="font-family:Poiret One;width:25%;" />
-        </div>
-    </form>
 </body>
 </html>
